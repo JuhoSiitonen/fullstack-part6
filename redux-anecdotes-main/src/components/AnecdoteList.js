@@ -3,7 +3,15 @@ import { addLike } from '../reducers/anecdoteReducer'
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
-  const anecdotes = useSelector(state => state)
+  const anecdotes = useSelector(state => {
+    if (state.filter === '') {
+      return state.anecdotes
+    }
+    const checkMatch = (anecdote) => {
+      return anecdote.content.toLowerCase().includes(state.filter.toLowerCase())
+    }
+    return state.anecdotes.filter(checkMatch)
+  })
 
   const likeAnecdote = (id) => {
     dispatch(addLike(id))
