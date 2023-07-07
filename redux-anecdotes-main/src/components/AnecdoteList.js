@@ -1,25 +1,32 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { addLike } from '../reducers/anecdoteReducer'
+import { likeNotification, removeNotification } from '../reducers/notifictionReducer'
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
-  const anecdotes = useSelector(state => {
-    if (state.filter === '') {
-      return state.anecdotes
+  const anecdotes = useSelector(({ filter, anecdotes}) => {
+    if (filter === '') {
+      return anecdotes
     }
     const checkMatch = (anecdote) => {
-      return anecdote.content.toLowerCase().includes(state.filter.toLowerCase())
+      return anecdote.content.toLowerCase().includes(filter.toLowerCase())
     }
-    return state.anecdotes.filter(checkMatch)
+    return anecdotes.filter(checkMatch)
   })
 
-  const likeAnecdote = (id) => {
+  const copyAnecdotes = [...anecdotes]
+
+  const likeAnecdote = (id, content) => {
     dispatch(addLike(id))
+    dispatch(likeNotification(content))
+    setTimeout(() => {
+      dispatch(removeNotification())
+    }, 5000)
   }
   return (
     <div>
-      {anecdotes
-        .sort((firstItem, secondItem) =>  secondItem.votes - firstItem.votes)
+      {copyAnecdotes
+        .sort((firstItem, secondItem) => secondItem.votes - firstItem.votes)
         .map(anecdote =>
         <div key={anecdote.id}>
           <div>
@@ -27,7 +34,7 @@ const AnecdoteList = () => {
           </div>
           <div>
             has {anecdote.votes}
-            <button onClick={() => likeAnecdote(anecdote.id)}>vote</button>
+            <button onClick={() => likeAnecdote(anecdote.id, anecdote.content)}>vote</button>
           </div>
         </div>
       )}
