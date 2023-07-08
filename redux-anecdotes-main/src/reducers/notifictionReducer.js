@@ -1,14 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { newLike } from './anecdoteReducer'
 
 const notificationSlice = createSlice({
     name: 'notification',
     initialState: '' ,
     reducers: {
-      likeNotification(state, action) {
-        return `You voted '${action.payload}'`
-      },
-      addNotification(state, action) {
-        return `You added anecdote '${action.payload}'`
+      addNewNotification(state, action) {
+        return action.payload
       },
       removeNotification(state, action) {
         return ''
@@ -16,5 +14,15 @@ const notificationSlice = createSlice({
     },
 })
 
-export const { likeNotification, addNotification, removeNotification } = notificationSlice.actions
+export const { newLikeNotification, addNewNotification, removeNotification } = notificationSlice.actions
+
+export const addNotification = (content, time) => {
+  return dispatch => {
+    dispatch(addNewNotification(content))
+    setTimeout(() => {
+      dispatch(removeNotification())
+    }, time*1000)
+  }
+}
+
 export default notificationSlice.reducer
