@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { newLike } from './anecdoteReducer'
 
 const notificationSlice = createSlice({
     name: 'notification',
