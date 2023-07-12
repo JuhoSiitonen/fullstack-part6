@@ -7,7 +7,17 @@ export const getAnecdotes = () =>
 
 export const createAnecdote = (content) => {
   const object = { content, votes: 0 }
-  axios.post(baseUrl, object).then(res => res.data)
+  axios.post(baseUrl, object)
+    .then(res => { 
+      console.log(res.data)
+      console.log(res)
+      return res.data}
+      )
+    .catch(error => {
+      console.log(error.message)
+      return error
+    })
+  
 }
 
 export const updateAnecdote = (object) => {
