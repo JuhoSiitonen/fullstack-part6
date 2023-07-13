@@ -8,7 +8,7 @@ const notificationReducer = (state, action) => {
         return `You voted '${action.payload}'`
     case "REMOVE":
         return ""
-    case "LESSTHANFIVE":
+    case "LESS":
         return "Anecdote should be more than 4 characters long"
     default:
         return state
@@ -37,7 +37,7 @@ export const removeNotification = () => {
 
 export const errorNotification = () => {
     return {
-      type: 'LESSTHANFIVE',
+      type: 'LESS',
     }
   }
 

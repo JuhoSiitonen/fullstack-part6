@@ -11,17 +11,7 @@ const App = () => {
 
   const newAnecdoteMutation = useMutation(createAnecdote, {
     onSuccess: (data, content) => {
-      queryClient.invalidateQueries('anecdotes')
-      dispatch(newNotification(content))
-      setTimeout(() =>{
-        dispatch(removeNotification())
-      }, 5000)
-    },
-    onError: (error) => {
-      dispatch(errorNotification())
-      setTimeout(() => {
-        dispatch(removeNotification())
-      }, 5000)
+      queryClient.invalidateQueries('anecdotes') 
     }
   })
 
@@ -41,7 +31,19 @@ const App = () => {
   const anecdotes = result.data
   
   const addAnecdote = async (content) => {
-    newAnecdoteMutation.mutate(content)
+    try {
+      await newAnecdoteMutation.mutateAsync(content)
+      dispatch(newNotification(content))
+      setTimeout(() =>{
+        dispatch(removeNotification())
+      }, 5000)
+      
+    } catch (error) {
+      dispatch(errorNotification())
+      setTimeout(() => {
+        dispatch(removeNotification())
+      }, 5000)
+    }
   }
 
   const handleVote = (anecdote) => {
